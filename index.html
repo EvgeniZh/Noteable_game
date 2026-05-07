@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noteable</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="menuScreen" class="screen active" aria-labelledby="appTitle">
+      <div class="menu-card">
+        <h1 id="appTitle">Noteable</h1>
+        <p class="intro">Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикална теория.<br />Избери с кой режим искаш да започнеш.</p>
+        <h2>Избери начален режим</h2>
+        <div class="menu-buttons" role="group" aria-label="Начален режим">
+          <button class="primary-btn" data-start-mode="notes">Ноти</button>
+          <button class="primary-btn" data-start-mode="keys">Тоналности</button>
+          <button class="primary-btn" data-start-mode="intervals">Интервали</button>
+          <button class="primary-btn" data-start-mode="theory">Теория</button>
+        </div>
+        <p class="hint">От вътрешния екран можеш да се върнеш тук от бутона „Към main menu“.</p>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen" aria-label="Игра Noteable">
+      <div class="game-layout">
+        <div class="stage-column">
+          <canvas id="musicCanvas" width="640" height="260" aria-label="Музикален пример"></canvas>
+          <div id="prompt" class="prompt"></div>
+          <div id="answers" class="answers"></div>
+          <div id="message" class="message" aria-live="polite"></div>
+        </div>
+
+        <aside class="side-panel" aria-label="Резултат и настройки">
+          <div class="score-card">
+            <div id="correctLabel" class="score correct">Верни: 0</div>
+            <div id="wrongLabel" class="score wrong">Грешни: 0</div>
+            <div id="bonusLabel" class="score bonus">Бонус: 0</div>
+            <div id="successLabel" class="score success">Успеваемост: 0%</div>
+          </div>
+          <div class="action-grid">
+            <button id="resetBtn" class="primary-btn">Reset</button>
+            <button id="nextBtn" class="primary-btn">Следващ</button>
+          </div>
+          <button id="mainMenuBtn" class="primary-btn full">Към main menu</button>
+
+          <fieldset class="settings">
+            <legend>Настройки</legend>
+            <label>Режим
+              <select id="modeSelect">
+                <option value="notes">Ноти</option>
+                <option value="keys">Тоналности</option>
+                <option value="intervals">Интервали</option>
+                <option value="theory">Теория</option>
+              </select>
+            </label>
+            <label>Имена на ноти
+              <select id="namingSelect">
+                <option value="letter">C D E F G A B</option>
+                <option value="solfege">Do Re Mi Fa Sol La Si</option>
+              </select>
+            </label>
+            <label>Ключ
+              <select id="clefSelect">
+                <option value="treble">Сол</option>
+                <option value="bass">Фа</option>
+                <option value="both" selected>И двете</option>
+              </select>
+            </label>
+            <label>Маж/Мин
+              <select id="tonalitySelect">
+                <option value="major">Мажор</option>
+                <option value="minor">Минор</option>
+                <option value="both" selected>И двете</option>
+              </select>
+            </label>
+            <label>Диези/Бемоли
+              <select id="familySelect">
+                <option value="both">И диези, и бемоли</option>
+                <option value="sharps">Само диези</option>
+                <option value="flats">Само бемоли</option>
+              </select>
+            </label>
+            <div class="inline-controls">
+              <label>До колко знака
+                <input id="signsInput" type="number" min="0" max="7" value="7" inputmode="numeric" />
+              </label>
+              <label class="check-label"><input id="accidentalsCheck" type="checkbox" checked /> Алт.</label>
+            </div>
+          </fieldset>
+          <button id="helpBtn" class="primary-btn help-button">Помощ</button>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="helpDialog" class="help-dialog">
+    <div class="dialog-header">
+      <h2>Помощ</h2>
+      <button id="closeHelpTop" class="icon-btn" aria-label="Затвори">×</button>
+    </div>
+    <div class="help-images">
+      <img src="assets/help_circle.png" alt="Кръг на тоналностите" />
+      <img src="assets/help_staff.png" alt="Ноти върху петолиние" />
+    </div>
+    <div class="dialog-actions">
+      <button id="closeHelpBtn" class="primary-btn">Назад</button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
