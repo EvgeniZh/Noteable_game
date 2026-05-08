@@ -8,22 +8,38 @@
 </head>
 <body>
   <main class="app-shell">
+    <div class="topbar" aria-label="Language">
+      <label class="language-control"><span data-i18n="languageLabel">Език</span>
+        <select id="languageSelect" aria-label="Language">
+          <option value="bg">Български</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+    </div>
+
     <section id="menuScreen" class="screen active" aria-labelledby="appTitle">
       <div class="menu-card">
-        <h1 id="appTitle">Noteable</h1>
-        <p class="intro">Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикална теория.<br />Избери с кой режим искаш да започнеш.</p>
-        <h2>Избери начален режим</h2>
-        <div class="menu-buttons" role="group" aria-label="Начален режим">
-          <button class="primary-btn" data-start-mode="notes">Ноти</button>
-          <button class="primary-btn" data-start-mode="keys">Тоналности</button>
-          <button class="primary-btn" data-start-mode="intervals">Интервали</button>
-          <button class="primary-btn" data-start-mode="theory">Теория</button>
+        <div class="brand-lockup">
+          <img class="brand-logo" src="assets/logo.png" alt="Noteable logo" />
+          <h1 id="appTitle">Noteable</h1>
         </div>
-        <p class="hint">От вътрешния екран можеш да се върнеш тук от бутона „Към main menu“.</p>
+        <p class="intro" data-i18n="intro">Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикална теория.<br />Избери с кой режим искаш да започнеш.</p>
+        <h2 data-i18n="chooseMode">Избери начален режим</h2>
+        <div class="menu-buttons" role="group" aria-label="Начален режим">
+          <button class="primary-btn" data-start-mode="notes" data-i18n="modeNotes">Ноти</button>
+          <button class="primary-btn" data-start-mode="keys" data-i18n="modeKeys">Тоналности</button>
+          <button class="primary-btn" data-start-mode="intervals" data-i18n="modeIntervals">Интервали</button>
+          <button class="primary-btn" data-start-mode="theory" data-i18n="modeTheory">Теория</button>
+        </div>
+        <p class="hint" data-i18n="menuHint">От вътрешния екран можеш да се върнеш тук от бутона „Към main menu“.</p>
       </div>
     </section>
 
     <section id="gameScreen" class="screen" aria-label="Игра Noteable">
+      <div class="game-brand">
+        <img class="game-logo" src="assets/logo.png" alt="Noteable logo" />
+        <span>Noteable</span>
+      </div>
       <div class="game-layout">
         <div class="stage-column">
           <canvas id="musicCanvas" width="640" height="260" aria-label="Музикален пример"></canvas>
@@ -40,56 +56,56 @@
             <div id="successLabel" class="score success">Успеваемост: 0%</div>
           </div>
           <div class="action-grid">
-            <button id="resetBtn" class="primary-btn">Reset</button>
-            <button id="nextBtn" class="primary-btn">Следващ</button>
+            <button id="resetBtn" class="primary-btn" data-i18n="reset">Reset</button>
+            <button id="nextBtn" class="primary-btn" data-i18n="next">Следващ</button>
           </div>
-          <button id="mainMenuBtn" class="primary-btn full">Към main menu</button>
+          <button id="mainMenuBtn" class="primary-btn full" data-i18n="mainMenu">Към main menu</button>
 
           <fieldset class="settings">
-            <legend>Настройки</legend>
-            <label>Режим
+            <legend data-i18n="settings">Настройки</legend>
+            <label><span data-i18n="modeLabel">Режим</span>
               <select id="modeSelect">
-                <option value="notes">Ноти</option>
-                <option value="keys">Тоналности</option>
-                <option value="intervals">Интервали</option>
-                <option value="theory">Теория</option>
+                <option value="notes" data-i18n="modeNotes">Ноти</option>
+                <option value="keys" data-i18n="modeKeys">Тоналности</option>
+                <option value="intervals" data-i18n="modeIntervals">Интервали</option>
+                <option value="theory" data-i18n="modeTheory">Теория</option>
               </select>
             </label>
-            <label>Имена на ноти
+            <label><span data-i18n="noteNames">Имена на ноти</span>
               <select id="namingSelect">
                 <option value="letter">C D E F G A B</option>
                 <option value="solfege">Do Re Mi Fa Sol La Si</option>
               </select>
             </label>
-            <label>Ключ
+            <label><span data-i18n="clefLabel">Ключ</span>
               <select id="clefSelect">
-                <option value="treble">Сол</option>
-                <option value="bass">Фа</option>
-                <option value="both" selected>И двете</option>
+                <option value="treble" data-i18n="treble">Сол</option>
+                <option value="bass" data-i18n="bass">Фа</option>
+                <option value="both" selected data-i18n="bothClefs">И двете</option>
               </select>
             </label>
-            <label>Маж/Мин
+            <label><span data-i18n="tonalityLabel">Маж/Мин</span>
               <select id="tonalitySelect">
-                <option value="major">Мажор</option>
-                <option value="minor">Минор</option>
-                <option value="both" selected>И двете</option>
+                <option value="major" data-i18n="major">Мажор</option>
+                <option value="minor" data-i18n="minor">Минор</option>
+                <option value="both" selected data-i18n="bothTonalities">И двете</option>
               </select>
             </label>
-            <label>Диези/Бемоли
+            <label><span data-i18n="familyLabel">Диези/Бемоли</span>
               <select id="familySelect">
-                <option value="both">И диези, и бемоли</option>
-                <option value="sharps">Само диези</option>
-                <option value="flats">Само бемоли</option>
+                <option value="both" data-i18n="bothFamilies">И диези, и бемоли</option>
+                <option value="sharps" data-i18n="sharpsOnly">Само диези</option>
+                <option value="flats" data-i18n="flatsOnly">Само бемоли</option>
               </select>
             </label>
             <div class="inline-controls">
-              <label>До колко знака
+              <label><span data-i18n="upToSigns">До колко знака</span>
                 <input id="signsInput" type="number" min="0" max="7" value="7" inputmode="numeric" />
               </label>
-              <label class="check-label"><input id="accidentalsCheck" type="checkbox" checked /> Алт.</label>
+              <label class="check-label"><input id="accidentalsCheck" type="checkbox" checked /> <span data-i18n="accidentals">Алт.</span></label>
             </div>
           </fieldset>
-          <button id="helpBtn" class="primary-btn help-button">Помощ</button>
+          <button id="helpBtn" class="primary-btn help-button" data-i18n="help">Помощ</button>
         </aside>
       </div>
     </section>
@@ -97,7 +113,7 @@
 
   <dialog id="helpDialog" class="help-dialog">
     <div class="dialog-header">
-      <h2>Помощ</h2>
+      <h2 data-i18n="help">Помощ</h2>
       <button id="closeHelpTop" class="icon-btn" aria-label="Затвори">×</button>
     </div>
     <div class="help-images">
@@ -105,7 +121,7 @@
       <img src="assets/help_staff.png" alt="Ноти върху петолиние" />
     </div>
     <div class="dialog-actions">
-      <button id="closeHelpBtn" class="primary-btn">Назад</button>
+      <button id="closeHelpBtn" class="primary-btn" data-i18n="back">Назад</button>
     </div>
   </dialog>
 

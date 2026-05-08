@@ -248,3 +248,57 @@ button, select, input { font: inherit; }
   .help-images { grid-template-columns: 1fr; }
   .help-images img { height: auto; max-height: 60vh; }
 }
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.language-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-weight: 700;
+}
+.language-control select {
+  min-height: 34px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--ink);
+  padding: 4px 8px;
+}
+.brand-lockup {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.brand-logo {
+  width: clamp(96px, 22vw, 164px);
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  mix-blend-mode: multiply;
+}
+.game-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: #345434;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 800;
+}
+.game-logo {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  border-radius: 14px;
+  mix-blend-mode: multiply;
+}
+@media (max-width: 620px) {
+  .topbar { justify-content: center; margin-top: 4px; }
+  .game-brand { justify-content: center; margin-bottom: 10px; }
+  .game-logo { width: 48px; height: 48px; }
+}

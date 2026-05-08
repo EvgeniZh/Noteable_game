@@ -1,27 +1,28 @@
-# Noteable - Web версия
+# Noteable Web v2
 
-Това е статична HTML/CSS/JS версия на Noteable. Не изисква backend и може да се качи директно в GitHub Pages, Netlify, Vercel или друг статичен хостинг.
+Static HTML/CSS/JS version of Noteable.
 
-## Стартиране локално
+## New in this version
+- Added generated Noteable logo in the menu and game header.
+- Added Bulgarian/English language selector.
+- The selected language is saved in the browser with localStorage.
+- Responsive layout for desktop and mobile.
 
-Отвори `index.html` в браузър или стартирай малък локален сървър:
+## GitHub Pages upload note
+For GitHub Pages, upload the CONTENTS of this folder to the repository root, so `index.html` is directly visible on the repository's main page.
 
-```bash
-python -m http.server 8000
+Correct:
+```
+index.html
+styles.css
+app.js
+assets/
 ```
 
-След това отвори `http://localhost:8000`.
-
-## Публикуване онлайн с линк
-
-### GitHub Pages
-1. Създай нов GitHub repository.
-2. Качи всички файлове от тази папка в root директорията.
-3. В Settings → Pages избери Branch: `main` и Folder: `/root`.
-4. GitHub ще даде публичен линк към сайта.
-
-### Netlify
-1. Влез в Netlify.
-2. Избери Add new site → Deploy manually.
-3. Drag & drop цялата папка `noteable_web`.
-4. Netlify ще генерира публичен линк.
+Incorrect:
+```
+noteable_web_v2/
+  index.html
+  styles.css
+  app.js
+```

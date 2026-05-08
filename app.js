@@ -3,6 +3,36 @@ const letterNames = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const solfegeNames = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
 const naturalSemitones = [0, 2, 4, 5, 7, 9, 11];
 
+const I18N = {
+  bg: {
+    languageLabel: 'Език', intro: 'Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикална теория.<br />Избери с кой режим искаш да започнеш.', chooseMode: 'Избери начален режим',
+    modeNotes: 'Ноти', modeKeys: 'Тоналности', modeIntervals: 'Интервали', modeTheory: 'Теория', menuHint: 'От вътрешния екран можеш да се върнеш тук от бутона „Към main menu“.',
+    reset: 'Reset', next: 'Следващ', mainMenu: 'Към main menu', settings: 'Настройки', modeLabel: 'Режим', noteNames: 'Имена на ноти', clefLabel: 'Ключ', tonalityLabel: 'Маж/Мин', familyLabel: 'Диези/Бемоли',
+    treble: 'Сол', bass: 'Фа', bothClefs: 'И двете', major: 'Мажор', minor: 'Минор', bothTonalities: 'И двете', bothFamilies: 'И диези, и бемоли', sharpsOnly: 'Само диези', flatsOnly: 'Само бемоли',
+    upToSigns: 'До колко знака', accidentals: 'Алт.', help: 'Помощ', back: 'Назад', correct: 'Верни', wrong: 'Грешни', bonus: 'Бонус', success: 'Успеваемост',
+    notePrompt: 'Познай нотата по нейната позиция върху петолинието.', keyPrompt: 'Познай тоналността по показаните арматурни знаци.', intervalPrompt: 'Познай интервала между двете ноти.',
+    correctMsg: 'Вярно!', wrongMsg: 'Грешно.', noteIs: 'Нотата е', correctAnswerIs: 'Правилният отговор е', intervalIs: 'Интервалът е', skipped: 'Прескочено: +1 към грешни.',
+    bonusQuestion: 'Бонус въпрос: Коя е паралелната тоналност на', relativeOf: 'Паралелната тоналност на', isWord: 'е', bonusCorrect: 'Бонус въпрос: вярно!', bonusCorrectAnswer: 'Бонус въпрос: правилният отговор е',
+    clefCanvas: 'Ключ', keyCanvas: 'Тоналност', recognizeKeySignature: 'Разпознай тоналността по арматурните знаци', multipleChoice: 'Въпрос с избираеми отговори',
+    majorWord: 'мажор', minorWord: 'минор', sharpWord: 'диез', flatWord: 'бемол'
+  },
+  en: {
+    languageLabel: 'Language', intro: 'Welcome to Noteable — a game for recognizing notes, key signatures, intervals, and music theory.<br />Choose the mode you want to start with.', chooseMode: 'Choose a starting mode',
+    modeNotes: 'Notes', modeKeys: 'Key signatures', modeIntervals: 'Intervals', modeTheory: 'Theory', menuHint: 'From the game screen, you can return here with the “Main menu” button.',
+    reset: 'Reset', next: 'Next', mainMenu: 'Main menu', settings: 'Settings', modeLabel: 'Mode', noteNames: 'Note names', clefLabel: 'Clef', tonalityLabel: 'Maj/Min', familyLabel: 'Sharps/Flats',
+    treble: 'Treble', bass: 'Bass', bothClefs: 'Both', major: 'Major', minor: 'Minor', bothTonalities: 'Both', bothFamilies: 'Sharps and flats', sharpsOnly: 'Sharps only', flatsOnly: 'Flats only',
+    upToSigns: 'Up to signs', accidentals: 'Acc.', help: 'Help', back: 'Back', correct: 'Correct', wrong: 'Wrong', bonus: 'Bonus', success: 'Success rate',
+    notePrompt: 'Name the note by its position on the staff.', keyPrompt: 'Identify the key signature shown on the staff.', intervalPrompt: 'Identify the interval between the two notes.',
+    correctMsg: 'Correct!', wrongMsg: 'Wrong.', noteIs: 'The note is', correctAnswerIs: 'The correct answer is', intervalIs: 'The interval is', skipped: 'Skipped: +1 wrong answer.',
+    bonusQuestion: 'Bonus question: What is the relative key of', relativeOf: 'The relative key of', isWord: 'is', bonusCorrect: 'Bonus question: correct!', bonusCorrectAnswer: 'Bonus question: the correct answer is',
+    clefCanvas: 'Clef', keyCanvas: 'Key', recognizeKeySignature: 'Recognize the key from the key signature', multipleChoice: 'Multiple-choice question',
+    majorWord: 'major', minorWord: 'minor', sharpWord: 'sharp', flatWord: 'flat'
+  }
+};
+let currentLang = localStorage.getItem('noteableLanguage') || 'bg';
+function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.bg[key] || key; }
+
+
 const majorKeys = [
   { name: 'C major', fifths: 0, isMinor: false, usesSharps: true, relativeName: 'A minor' },
   { name: 'G major', fifths: 1, isMinor: false, usesSharps: true, relativeName: 'E minor' },
@@ -46,31 +76,35 @@ const intervals = [
   { label: 'M7', degree: 7, semitones: 11 }, { label: 'P8', degree: 8, semitones: 12 },
 ];
 const theoryQuestions = [
-  q("Какво означава обозначението 'p' в динамиката?", 'Piano – тихо', 'Forte – силно', 'Presto – бързо', 'Portato – отделено', "'p' означава piano – тихо изпълнение."),
-  q("Кое обозначение значи 'много силно'?", 'ff', 'pp', 'mf', 'mp', 'ff = fortissimo – много силно.'),
-  q('Какво означава crescendo?', 'Постепенно усилване', 'Постепенно ускоряване', 'Постепенно забавяне', 'Постепенно скъсяване', 'Crescendo означава постепенно усилване.'),
-  q('Каква е разликата между Allegro и Adagio?', 'Allegro е бързо, Adagio е бавно', 'И двете са динамични знаци', 'Allegro е тихо, Adagio е силно', 'Няма разлика', 'Allegro е бързо темпо, а Adagio е бавно.'),
-  q("Какво показва знакът '>' над или под нота?", 'Акцент', 'Легато', 'Пауза', 'Фермата', "Символът '>' е знак за акцент."),
-  q('Какво означава staccato?', 'Късо и отделено изпълнение', 'Свързано изпълнение', 'Много бавно', 'Много силно', 'Staccato означава кратко и отделено изпълнение.'),
-  q('Кое е legato?', 'Свързано изпълнение', 'Отделено изпълнение', 'Много силно', 'Украса', 'Legato е свързано, плавно изпълнение.'),
-  q("Какво означава 'rit.'?", 'Забавяне', 'Ускоряване', 'Повторение', 'Подчертаване', 'rit. = ritardando – постепенно забавяне.'),
-  q("Кое обозначение значи 'умерено силно'?", 'mf', 'ff', 'pp', 'sfz', 'mf = mezzo forte – умерено силно.'),
-  q('Какво означава знакът фермата (𝄐)?', 'Задържане на тон/пауза', 'Ускоряване', 'Отделяне', 'Прескачане', 'Фермата означава задържане или удължаване.'),
-  q('Кое темпо е най-бързо?', 'Presto', 'Largo', 'Andante', 'Adagio', 'Presto е много бързо темпо.'),
-  q('Какво означава diminuendo?', 'Постепенно отслабване', 'Постепенно ускоряване', 'По-свързано изпълнение', 'Повишаване с полутон', 'Diminuendo е постепенно намаляване на силата.'),
-  q("Какво означава 'a tempo'?", 'Връщане към основното темпо', 'Свирене по-бързо', 'Свирене по-тихо', 'Свирене с акцент', 'a tempo връща изпълнението към предишното основно темпо.'),
-  q("Какво означава 'sfz'?", 'Внезапен силен акцент', 'Постепенно отслабване', 'Много тихо', 'Свързано изпълнение', 'sfz = sforzato – внезапен, силен акцент.'),
-  q("Какво означава 'Fine'?", 'Край', 'Начало', 'Повтори', 'Забави', 'Fine означава край.'),
-  q('Какво означава Da Capo (D.C.)?', 'Отначало', 'От края', 'По-бавно', 'По-силно', 'D.C. означава връщане в началото.'),
-  q("Какво означава 'accelerando'?", 'Постепенно ускоряване', 'Постепенно забавяне', 'Постепенно усилване', 'Постепенно отслабване', 'Accelerando означава постепенно ускоряване.'),
-  q("Какво означава 'dolce'?", 'Нежно, сладко', 'Много силно', 'Маркирано', 'С ускоряване', 'Dolce означава нежно, меко, сладко звучене.'),
-  q("Какво означава 'tenuto'?", 'Задържане до пълната стойност', 'Много бързо', 'Много тихо', 'Прескачане', 'Tenuto означава задържане на тона до пълната му стойност.'),
-  q("Какво означава 'con brio'?", 'С жар, с енергия', 'Много тихо', 'Много бавно', 'Кратко и отделено', 'Con brio означава с живост и енергия.'),
+  mq("Какво означава обозначението 'p' в динамиката?", "What does the dynamic marking 'p' mean?", 'Piano – тихо', 'Piano – soft', 'Forte – силно', 'Forte – loud', 'Presto – бързо', 'Presto – fast', 'Portato – отделено', 'Portato – detached', "'p' означава piano – тихо изпълнение.", "'p' means piano — soft playing."),
+  mq("Кое обозначение значи 'много силно'?", "Which marking means 'very loud'?", 'ff', 'ff', 'pp', 'pp', 'mf', 'mf', 'mp', 'mp', 'ff = fortissimo – много силно.', 'ff = fortissimo — very loud.'),
+  mq('Какво означава crescendo?', 'What does crescendo mean?', 'Постепенно усилване', 'Gradually getting louder', 'Постепенно ускоряване', 'Gradually getting faster', 'Постепенно забавяне', 'Gradually slowing down', 'Постепенно скъсяване', 'Gradually shortening', 'Crescendo означава постепенно усилване.', 'Crescendo means gradually getting louder.'),
+  mq('Каква е разликата между Allegro и Adagio?', 'What is the difference between Allegro and Adagio?', 'Allegro е бързо, Adagio е бавно', 'Allegro is fast, Adagio is slow', 'И двете са динамични знаци', 'Both are dynamic markings', 'Allegro е тихо, Adagio е силно', 'Allegro is soft, Adagio is loud', 'Няма разлика', 'There is no difference', 'Allegro е бързо темпо, а Adagio е бавно.', 'Allegro is a fast tempo, while Adagio is slow.'),
+  mq("Какво показва знакът '>' над или под нота?", "What does the '>' sign above or below a note show?", 'Акцент', 'Accent', 'Легато', 'Legato', 'Пауза', 'Rest', 'Фермата', 'Fermata', "Символът '>' е знак за акцент.", "The '>' symbol is an accent mark."),
+  mq('Какво означава staccato?', 'What does staccato mean?', 'Късо и отделено изпълнение', 'Short, detached playing', 'Свързано изпълнение', 'Connected playing', 'Много бавно', 'Very slow', 'Много силно', 'Very loud', 'Staccato означава кратко и отделено изпълнение.', 'Staccato means short, detached playing.'),
+  mq('Кое е legato?', 'What is legato?', 'Свързано изпълнение', 'Connected playing', 'Отделено изпълнение', 'Detached playing', 'Много силно', 'Very loud', 'Украса', 'Ornament', 'Legato е свързано, плавно изпълнение.', 'Legato is connected, smooth playing.'),
+  mq("Какво означава 'rit.'?", "What does 'rit.' mean?", 'Забавяне', 'Slowing down', 'Ускоряване', 'Speeding up', 'Повторение', 'Repeat', 'Подчертаване', 'Emphasis', 'rit. = ritardando – постепенно забавяне.', 'rit. = ritardando — gradually slowing down.'),
+  mq("Кое обозначение значи 'умерено силно'?", "Which marking means 'moderately loud'?", 'mf', 'mf', 'ff', 'ff', 'pp', 'pp', 'sfz', 'sfz', 'mf = mezzo forte – умерено силно.', 'mf = mezzo forte — moderately loud.'),
+  mq('Какво означава знакът фермата (𝄐)?', 'What does the fermata sign (𝄐) mean?', 'Задържане на тон/пауза', 'Hold a note/rest', 'Ускоряване', 'Speeding up', 'Отделяне', 'Detaching', 'Прескачане', 'Skipping', 'Фермата означава задържане или удължаване.', 'A fermata means holding or lengthening.'),
+  mq('Кое темпо е най-бързо?', 'Which tempo is the fastest?', 'Presto', 'Presto', 'Largo', 'Largo', 'Andante', 'Andante', 'Adagio', 'Adagio', 'Presto е много бързо темпо.', 'Presto is a very fast tempo.'),
+  mq('Какво означава diminuendo?', 'What does diminuendo mean?', 'Постепенно отслабване', 'Gradually getting softer', 'Постепенно ускоряване', 'Gradually getting faster', 'По-свързано изпълнение', 'More connected playing', 'Повишаване с полутон', 'Raising by a semitone', 'Diminuendo е постепенно намаляване на силата.', 'Diminuendo means gradually decreasing the volume.'),
+  mq("Какво означава 'a tempo'?", "What does 'a tempo' mean?", 'Връщане към основното темпо', 'Return to the original tempo', 'Свирене по-бързо', 'Play faster', 'Свирене по-тихо', 'Play softer', 'Свирене с акцент', 'Play with an accent', 'a tempo връща изпълнението към предишното основно темпо.', 'a tempo returns the music to the previous main tempo.'),
+  mq("Какво означава 'sfz'?", "What does 'sfz' mean?", 'Внезапен силен акцент', 'Sudden strong accent', 'Постепенно отслабване', 'Gradually getting softer', 'Много тихо', 'Very soft', 'Свързано изпълнение', 'Connected playing', 'sfz = sforzato – внезапен, силен акцент.', 'sfz = sforzato — a sudden, strong accent.'),
+  mq("Какво означава 'Fine'?", "What does 'Fine' mean?", 'Край', 'End', 'Начало', 'Beginning', 'Повтори', 'Repeat', 'Забави', 'Slow down', 'Fine означава край.', 'Fine means end.'),
+  mq('Какво означава Da Capo (D.C.)?', 'What does Da Capo (D.C.) mean?', 'Отначало', 'From the beginning', 'От края', 'From the end', 'По-бавно', 'Slower', 'По-силно', 'Louder', 'D.C. означава връщане в началото.', 'D.C. means returning to the beginning.'),
+  mq("Какво означава 'accelerando'?", "What does 'accelerando' mean?", 'Постепенно ускоряване', 'Gradually speeding up', 'Постепенно забавяне', 'Gradually slowing down', 'Постепенно усилване', 'Gradually getting louder', 'Постепенно отслабване', 'Gradually getting softer', 'Accelerando означава постепенно ускоряване.', 'Accelerando means gradually speeding up.'),
+  mq("Какво означава 'dolce'?", "What does 'dolce' mean?", 'Нежно, сладко', 'Gently, sweetly', 'Много силно', 'Very loud', 'Маркирано', 'Marked', 'С ускоряване', 'Speeding up', 'Dolce означава нежно, меко, сладко звучене.', 'Dolce means gentle, soft, sweet-sounding playing.'),
+  mq("Какво означава 'tenuto'?", "What does 'tenuto' mean?", 'Задържане до пълната стойност', 'Hold for the full value', 'Много бързо', 'Very fast', 'Много тихо', 'Very soft', 'Прескачане', 'Skipping', 'Tenuto означава задържане на тона до пълната му стойност.', 'Tenuto means holding the note for its full value.'),
+  mq("Какво означава 'con brio'?", "What does 'con brio' mean?", 'С жар, с енергия', 'With spirit and energy', 'Много тихо', 'Very soft', 'Много бавно', 'Very slow', 'Кратко и отделено', 'Short and detached', 'Con brio означава с живост и енергия.', 'Con brio means with liveliness and energy.'),
 ];
 
-function q(prompt, correct, a, b, c, explanation) {
-  return { prompt, correctAnswer: correct, options: [correct, a, b, c], explanation };
+function mq(bgPrompt, enPrompt, bgCorrect, enCorrect, bgA, enA, bgB, enB, bgC, enC, bgExplanation, enExplanation) {
+  return {
+    bg: { prompt: bgPrompt, correctAnswer: bgCorrect, options: [bgCorrect, bgA, bgB, bgC], explanation: bgExplanation },
+    en: { prompt: enPrompt, correctAnswer: enCorrect, options: [enCorrect, enA, enB, enC], explanation: enExplanation },
+  };
 }
+function localizeTheory(question) { return question[currentLang] || question.bg; }
 function randInt(n) { return Math.floor(Math.random() * n); }
 function pick(arr) { return arr[randInt(arr.length)]; }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
@@ -108,12 +142,35 @@ const els = {
   reset: document.getElementById('resetBtn'), next: document.getElementById('nextBtn'), mainMenu: document.getElementById('mainMenuBtn'), help: document.getElementById('helpBtn'),
   mode: document.getElementById('modeSelect'), naming: document.getElementById('namingSelect'), clef: document.getElementById('clefSelect'), tonality: document.getElementById('tonalitySelect'), family: document.getElementById('familySelect'), signs: document.getElementById('signsInput'), accidentals: document.getElementById('accidentalsCheck'),
   helpDialog: document.getElementById('helpDialog'), closeHelp: document.getElementById('closeHelpBtn'), closeHelpTop: document.getElementById('closeHelpTop'),
+  lang: document.getElementById('languageSelect'),
 };
 const ctx = els.canvas.getContext('2d');
 const state = {
   correctCount: 0, wrongCount: 0, bonusCount: 0, recentTheory: [], timer: 0,
   noteQ: null, keyQ: null, intervalQ: null, theoryQ: null, bonusQ: null,
 };
+
+const bgNoteRoots = { C: 'До', D: 'Ре', E: 'Ми', F: 'Фа', G: 'Сол', A: 'Ла', B: 'Си' };
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  if (els.lang) els.lang.value = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(node => {
+    const value = t(node.dataset.i18n);
+    if (node.tagName === 'OPTION' || node.tagName === 'BUTTON' || node.tagName === 'LEGEND' || node.tagName === 'H2' || node.tagName === 'SPAN') node.textContent = value;
+    else node.innerHTML = value;
+  });
+  updateScoreLabels();
+  updatePrompt();
+  drawCanvas();
+}
+function keyDisplayName(name) {
+  if (currentLang === 'en') return name;
+  const [rawRoot, mode] = name.split(' ');
+  const letter = rawRoot[0];
+  const accidental = rawRoot.includes('#') ? ` ${t('sharpWord')}` : rawRoot.includes('b') ? ` ${t('flatWord')}` : '';
+  return `${bgNoteRoots[letter] || rawRoot}${accidental} ${mode === 'major' ? t('majorWord') : t('minorWord')}`;
+}
+function clefDisplayName(clef) { return clef === 'Treble' ? t('treble') : t('bass'); }
 
 function startGame(mode) {
   els.mode.value = mode;
@@ -139,11 +196,11 @@ function resetScore() {
   updateScoreLabels();
 }
 function updateScoreLabels() {
-  els.correct.textContent = `Верни: ${state.correctCount}`;
-  els.wrong.textContent = `Грешни: ${state.wrongCount}`;
-  els.bonus.textContent = `Бонус: ${state.bonusCount}`;
+  els.correct.textContent = `${t('correct')}: ${state.correctCount}`;
+  els.wrong.textContent = `${t('wrong')}: ${state.wrongCount}`;
+  els.bonus.textContent = `${t('bonus')}: ${state.bonusCount}`;
   const total = state.correctCount + state.wrongCount;
-  els.success.textContent = `Успеваемост: ${total > 0 ? Math.round(state.correctCount * 100 / total) : 0}%`;
+  els.success.textContent = `${t('success')}: ${total > 0 ? Math.round(state.correctCount * 100 / total) : 0}%`;
 }
 function setMessage(text, type = '') {
   els.message.textContent = text;
@@ -156,7 +213,7 @@ function generateQuestion() {
   els.answers.innerHTML = '';
 
   if (els.mode.value === MODES.notes) { buildNoteQuestion(); buildNoteButtons(); }
-  else if (els.mode.value === MODES.keys) { buildKeyQuestion(); buildChoiceButtons(state.keyQ.options, handleKeyAnswer); }
+  else if (els.mode.value === MODES.keys) { buildKeyQuestion(); buildChoiceButtons(state.keyQ.options.map(keyDisplayName), handleKeyAnswer); }
   else if (els.mode.value === MODES.intervals) { buildIntervalQuestion(); buildIntervalButtons(); }
   else { buildTheoryQuestion(); buildChoiceButtons(shuffle(state.theoryQ.options), handleTheoryAnswer); }
   updatePrompt();
@@ -171,7 +228,7 @@ function buildNoteQuestion() {
   const clef = selectedClef();
   const note = cloneNote(pick(clef === 'Treble' ? trebleRange() : bassRange()));
   note.accidental = els.accidentals.checked ? pick([-1, 0, 0, 0, 1]) : 0;
-  state.noteQ = { clef, keySignature: pick(currentKeys()), note, prompt: 'Познай нотата по нейната позиция върху петолинието.' };
+  state.noteQ = { clef, keySignature: pick(currentKeys()), note, promptKey: 'notePrompt' };
 }
 function buildKeyQuestion() {
   const clef = selectedClef();
@@ -181,7 +238,7 @@ function buildKeyQuestion() {
   const correct = pick(keys);
   const opts = new Set([correct.name]);
   while (opts.size < 4) opts.add(pick(keys).name);
-  state.keyQ = { clef, keySignature: correct, correctAnswer: correct.name, bonusAnswer: correct.relativeName, options: shuffle([...opts]), prompt: 'Познай тоналността по показаните арматурни знаци.' };
+  state.keyQ = { clef, keySignature: correct, correctAnswer: correct.name, bonusAnswer: correct.relativeName, options: shuffle([...opts]), promptKey: 'keyPrompt' };
 }
 function buildIntervalQuestion() {
   const clef = selectedClef();
@@ -195,10 +252,10 @@ function buildIntervalQuestion() {
     if (acc < -1 || acc > 1) continue;
     top.accidental = acc;
     if (!isNoteInClefRange(clef, top)) continue;
-    state.intervalQ = { clef, bottomNote: bottom, topNote: top, interval, prompt: 'Познай интервала между двете ноти.' };
+    state.intervalQ = { clef, bottomNote: bottom, topNote: top, interval, promptKey: 'intervalPrompt' };
   }
   if (!state.intervalQ) {
-    state.intervalQ = { clef, bottomNote: { stepIndex: 0, octave: clef === 'Treble' ? 4 : 3, accidental: 0 }, topNote: { stepIndex: 4, octave: clef === 'Treble' ? 4 : 3, accidental: 0 }, interval: intervals.find(i => i.label === 'P5'), prompt: 'Познай интервала между двете ноти.' };
+    state.intervalQ = { clef, bottomNote: { stepIndex: 0, octave: clef === 'Treble' ? 4 : 3, accidental: 0 }, topNote: { stepIndex: 4, octave: clef === 'Treble' ? 4 : 3, accidental: 0 }, interval: intervals.find(i => i.label === 'P5'), promptKey: 'intervalPrompt' };
   }
 }
 function buildTheoryQuestion() {
@@ -208,7 +265,7 @@ function buildTheoryQuestion() {
   const ix = pick(candidates);
   state.recentTheory.push(ix);
   while (state.recentTheory.length > 6) state.recentTheory.shift();
-  state.theoryQ = theoryQuestions[ix];
+  state.theoryQ = localizeTheory(theoryQuestions[ix]);
 }
 function buildNoteButtons() {
   for (let i = 0; i < 7; i++) {
@@ -227,10 +284,11 @@ function addAnswerButton(text, type, handler) {
   els.answers.append(btn);
 }
 function updatePrompt() {
+  if (!els.prompt) return;
   els.prompt.textContent = state.bonusQ ? state.bonusQ.prompt :
-    els.mode.value === MODES.notes ? state.noteQ.prompt :
-    els.mode.value === MODES.keys ? state.keyQ.prompt :
-    els.mode.value === MODES.intervals ? state.intervalQ.prompt : state.theoryQ.prompt;
+    els.mode.value === MODES.notes && state.noteQ ? t(state.noteQ.promptKey) :
+    els.mode.value === MODES.keys && state.keyQ ? t(state.keyQ.promptKey) :
+    els.mode.value === MODES.intervals && state.intervalQ ? t(state.intervalQ.promptKey) : state.theoryQ ? state.theoryQ.prompt : '';
 }
 function finishAnswer() {
   updateScoreLabels();
@@ -239,25 +297,25 @@ function finishAnswer() {
 }
 function handleNoteAnswer(guess) {
   const expected = noteText(state.noteQ.note, els.naming.value);
-  if (guess === state.noteQ.note.stepIndex) { state.correctCount++; setMessage(`Вярно! Нотата е ${expected}.`, 'good'); }
-  else { state.wrongCount++; setMessage(`Грешно. Правилният отговор е ${expected}.`, 'bad'); }
+  if (guess === state.noteQ.note.stepIndex) { state.correctCount++; setMessage(`${t('correctMsg')} ${t('noteIs')} ${expected}.`, 'good'); }
+  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${t('correctAnswerIs')} ${expected}.`, 'bad'); }
   finishAnswer();
 }
 function handleIntervalAnswer(guess) {
-  if (guess === state.intervalQ.interval.label) { state.correctCount++; setMessage(`Вярно! Интервалът е ${state.intervalQ.interval.label}.`, 'good'); }
-  else { state.wrongCount++; setMessage(`Грешно. Интервалът е ${state.intervalQ.interval.label}.`, 'bad'); }
+  if (guess === state.intervalQ.interval.label) { state.correctCount++; setMessage(`${t('correctMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'good'); }
+  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'bad'); }
   finishAnswer();
 }
 function handleKeyAnswer(selected) {
-  if (selected === state.keyQ.correctAnswer) {
+  if (selected === keyDisplayName(state.keyQ.correctAnswer)) {
     state.correctCount++;
-    setMessage(`Вярно! Това е ${state.keyQ.correctAnswer}.`, 'good');
+    setMessage(`${t('correctMsg')} ${keyDisplayName(state.keyQ.correctAnswer)}.`, 'good');
     updateScoreLabels();
     showParallelBonusQuestion();
     return;
   }
   state.wrongCount++;
-  setMessage(`Грешно. Правилният отговор е ${state.keyQ.correctAnswer}.`, 'bad');
+  setMessage(`${t('wrongMsg')} ${t('correctAnswerIs')} ${keyDisplayName(state.keyQ.correctAnswer)}.`, 'bad');
   finishAnswer();
 }
 function showParallelBonusQuestion() {
@@ -265,20 +323,20 @@ function showParallelBonusQuestion() {
   const candidates = correct.isMinor ? majorKeys : minorKeys;
   const opts = new Set([correct.relativeName]);
   while (opts.size < 4) opts.add(pick(candidates).name);
-  state.bonusQ = { prompt: `Бонус въпрос: Коя е паралелната тоналност на ${correct.name}?`, correctAnswer: correct.relativeName, options: shuffle([...opts]), explanation: `Паралелната тоналност на ${correct.name} е ${correct.relativeName}.` };
+  state.bonusQ = { prompt: `${t('bonusQuestion')} ${keyDisplayName(correct.name)}?`, correctAnswer: correct.relativeName, options: shuffle([...opts]), explanation: `${t('relativeOf')} ${keyDisplayName(correct.name)} ${t('isWord')} ${keyDisplayName(correct.relativeName)}.` };
   els.answers.innerHTML = '';
-  buildChoiceButtons(state.bonusQ.options, handleBonusAnswer);
+  buildChoiceButtons(state.bonusQ.options.map(keyDisplayName), handleBonusAnswer);
   updatePrompt();
   drawCanvas();
 }
 function handleBonusAnswer(selected) {
-  if (selected === state.bonusQ.correctAnswer) { state.bonusCount++; setMessage(`Бонус въпрос: вярно! ${state.bonusQ.explanation}`, 'info'); }
-  else setMessage(`Бонус въпрос: правилният отговор е ${state.bonusQ.correctAnswer}.`, 'warn');
+  if (selected === keyDisplayName(state.bonusQ.correctAnswer)) { state.bonusCount++; setMessage(`${t('bonusCorrect')} ${state.bonusQ.explanation}`, 'info'); }
+  else setMessage(`${t('bonusCorrectAnswer')} ${keyDisplayName(state.bonusQ.correctAnswer)}.`, 'warn');
   finishAnswer();
 }
 function handleTheoryAnswer(selected) {
-  if (selected === state.theoryQ.correctAnswer) { state.correctCount++; setMessage(`Вярно! ${state.theoryQ.explanation}`, 'good'); }
-  else { state.wrongCount++; setMessage(`Грешно. ${state.theoryQ.explanation}`, 'bad'); }
+  if (selected === state.theoryQ.correctAnswer) { state.correctCount++; setMessage(`${t('correctMsg')} ${state.theoryQ.explanation}`, 'good'); }
+  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${state.theoryQ.explanation}`, 'bad'); }
   finishAnswer();
 }
 
@@ -300,16 +358,16 @@ function drawCanvas() {
   ctx.font = '700 14px Segoe UI, sans-serif';
   if (els.mode.value === MODES.notes && state.noteQ) {
     drawNote(clef, state.noteQ.note, x + 110, topY);
-    ctx.fillText(`Ключ: ${clef === 'Treble' ? 'Сол' : 'Фа'}`, 430, 28);
-    ctx.fillText(`Тоналност: ${state.noteQ.keySignature.name}`, 430, 50);
+    ctx.fillText(`${t('clefCanvas')}: ${clefDisplayName(clef)}`, 430, 28);
+    ctx.fillText(`${t('keyCanvas')}: ${keyDisplayName(state.noteQ.keySignature.name)}`, 430, 50);
   } else if (els.mode.value === MODES.keys && state.keyQ) {
     ctx.font = '700 15px Segoe UI, sans-serif';
-    ctx.fillText('Разпознай тоналността по арматурните знаци', 210, 30);
-    ctx.fillText(`Ключ: ${clef === 'Treble' ? 'Сол' : 'Фа'}`, 210, 54);
+    ctx.fillText(t('recognizeKeySignature'), 210, 30);
+    ctx.fillText(`${t('clefCanvas')}: ${clefDisplayName(clef)}`, 210, 54);
   } else if (els.mode.value === MODES.intervals && state.intervalQ) {
     drawNote(clef, state.intervalQ.bottomNote, x + 130, topY);
     drawNote(clef, state.intervalQ.topNote, x + 250, topY);
-    ctx.fillText(`Ключ: ${clef === 'Treble' ? 'Сол' : 'Фа'}`, 430, 28);
+    ctx.fillText(`${t('clefCanvas')}: ${clefDisplayName(clef)}`, 430, 28);
   }
   ctx.restore();
 }
@@ -320,7 +378,7 @@ function drawTheoryDecoration(x, y) {
   ctx.fillText('p   mf   ff   >   •   𝄐', x + 80, y + 60);
   ctx.fillStyle = 'dimgray';
   ctx.font = '700 18px Segoe UI, sans-serif';
-  ctx.fillText('Въпрос с избираеми отговори', x + 130, y + 110);
+  ctx.fillText(t('multipleChoice'), x + 130, y + 110);
 }
 function drawStaff(x, y, w) {
   ctx.strokeStyle = 'black';
@@ -381,7 +439,7 @@ function validateSigns() {
 
 document.querySelectorAll('[data-start-mode]').forEach(btn => btn.addEventListener('click', () => startGame(btn.dataset.startMode)));
 els.reset.addEventListener('click', () => { resetScore(); generateQuestion(); });
-els.next.addEventListener('click', () => { window.clearTimeout(state.timer); state.wrongCount++; setMessage('Прескочено: +1 към грешни.', 'warn'); updateScoreLabels(); generateQuestion(); });
+els.next.addEventListener('click', () => { window.clearTimeout(state.timer); state.wrongCount++; setMessage(t('skipped'), 'warn'); updateScoreLabels(); generateQuestion(); });
 els.mainMenu.addEventListener('click', () => { window.clearTimeout(state.timer); showScreen('menu'); });
 els.mode.addEventListener('change', () => { resetScore(); generateQuestion(); });
 [els.naming, els.clef, els.tonality, els.family, els.accidentals].forEach(el => el.addEventListener('change', generateQuestion));
@@ -389,5 +447,7 @@ els.signs.addEventListener('input', () => { validateSigns(); generateQuestion();
 els.help.addEventListener('click', () => els.helpDialog.showModal());
 els.closeHelp.addEventListener('click', () => els.helpDialog.close());
 els.closeHelpTop.addEventListener('click', () => els.helpDialog.close());
+els.lang.addEventListener('change', () => { currentLang = els.lang.value; localStorage.setItem('noteableLanguage', currentLang); resetScore(); applyLanguage(); generateQuestion(); });
 window.addEventListener('resize', drawCanvas);
+applyLanguage();
 updateScoreLabels();
