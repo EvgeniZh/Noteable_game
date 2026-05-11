@@ -1,28 +1,17 @@
-# Noteable Web v2
+# Noteable - Web версия v5
 
-Static HTML/CSS/JS version of Noteable.
+Статична HTML/CSS/JS версия на Noteable.
 
-## New in this version
-- Added generated Noteable logo in the menu and game header.
-- Added Bulgarian/English language selector.
-- The selected language is saved in the browser with localStorage.
-- Responsive layout for desktop and mobile.
+## Промени във v5
 
-## GitHub Pages upload note
-For GitHub Pages, upload the CONTENTS of this folder to the repository root, so `index.html` is directly visible on the repository's main page.
+- Намалено е времето за показване на съобщенията за верен/грешен/прескочен отговор.
+- Добавен е бутон **Play** в режим **Интервали**.
+- Бутонът Play пуска синтезиран пиано-звук на показания интервал и показва кратка пиано-анимация.
+- Коригирани са позициите на ключовете Сол/Фа и арматурните знаци в picture box-а, така че да са по-близки до реалното нотиране.
 
-Correct:
-```
-index.html
-styles.css
-app.js
-assets/
-```
+## Публикуване
 
-Incorrect:
-```
-noteable_web_v2/
-  index.html
-  styles.css
-  app.js
-```
+Качи съдържанието на тази папка директно в root на GitHub repository-то, така че `index.html` да е видим на главната страница на repository-то.
+
+## v5 fix 1
+- Изравнен е perceived volume-ът на Play звука в режим Интервали: ниските тонове са компенсирани, високите са леко овладени, а общото ниво е умерено чрез master gain и compressor.

@@ -1,22 +1,6 @@
 <!doctype html>
 <html lang="bg">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFC6WY1C3J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-RFC6WY1C3J');
-</script>
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "wnsrafycal");
-</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noteable</title>
@@ -39,15 +23,14 @@
           <img class="brand-logo" src="assets/logo.png" alt="Noteable logo" />
           <h1 id="appTitle">Noteable</h1>
         </div>
-        <p class="intro" data-i18n="intro">Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикална теория.<br />Избери с кой режим искаш да започнеш.</p>
+        <p class="intro" data-i18n="intro">Добре дошъл в Noteable — игра за разпознаване на ноти, тоналности, интервали и музикални символи.<br />Избери с кой режим искаш да започнеш.</p>
         <h2 data-i18n="chooseMode">Избери начален режим</h2>
         <div class="menu-buttons" role="group" aria-label="Начален режим">
           <button class="primary-btn" data-start-mode="notes" data-i18n="modeNotes">Ноти</button>
           <button class="primary-btn" data-start-mode="keys" data-i18n="modeKeys">Тоналности</button>
           <button class="primary-btn" data-start-mode="intervals" data-i18n="modeIntervals">Интервали</button>
-          <button class="primary-btn" data-start-mode="theory" data-i18n="modeTheory">Теория</button>
+          <button class="primary-btn" data-start-mode="symbols" data-i18n="modeSymbols">Музикални символи</button>
         </div>
-        <p class="hint" data-i18n="menuHint">От вътрешния екран можеш да се върнеш тук от бутона „Към main menu“.</p>
       </div>
     </section>
 
@@ -55,20 +38,23 @@
       <div class="game-brand">
         <img class="game-logo" src="assets/logo.png" alt="Noteable logo" />
         <span>Noteable</span>
+        <div id="message" class="message brand-message" aria-live="polite"></div>
       </div>
       <div class="game-layout">
         <div class="stage-column">
           <canvas id="musicCanvas" width="640" height="260" aria-label="Музикален пример"></canvas>
+          <div class="interval-tools">
+            <button id="playIntervalBtn" class="primary-btn play-interval" data-i18n="playInterval" hidden>Play</button>
+          </div>
+          <div id="pianoClip" class="piano-clip" hidden></div>
           <div id="prompt" class="prompt"></div>
           <div id="answers" class="answers"></div>
-          <div id="message" class="message" aria-live="polite"></div>
         </div>
 
         <aside class="side-panel" aria-label="Резултат и настройки">
           <div class="score-card">
             <div id="correctLabel" class="score correct">Верни: 0</div>
             <div id="wrongLabel" class="score wrong">Грешни: 0</div>
-            <div id="bonusLabel" class="score bonus">Бонус: 0</div>
             <div id="successLabel" class="score success">Успеваемост: 0%</div>
           </div>
           <div class="action-grid">
@@ -84,7 +70,7 @@
                 <option value="notes" data-i18n="modeNotes">Ноти</option>
                 <option value="keys" data-i18n="modeKeys">Тоналности</option>
                 <option value="intervals" data-i18n="modeIntervals">Интервали</option>
-                <option value="theory" data-i18n="modeTheory">Теория</option>
+                <option value="symbols" data-i18n="modeSymbols">Музикални символи</option>
               </select>
             </label>
             <label><span data-i18n="noteNames">Имена на ноти</span>
@@ -102,9 +88,8 @@
             </label>
             <label><span data-i18n="tonalityLabel">Маж/Мин</span>
               <select id="tonalitySelect">
-                <option value="major" data-i18n="major">Мажор</option>
+                <option value="major" selected data-i18n="major">Мажор</option>
                 <option value="minor" data-i18n="minor">Минор</option>
-                <option value="both" selected data-i18n="bothTonalities">И двете</option>
               </select>
             </label>
             <label><span data-i18n="familyLabel">Диези/Бемоли</span>
