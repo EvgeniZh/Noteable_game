@@ -1,26 +1,6 @@
 <!doctype html>
 <html lang="bg">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFC6WY1C3J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-RFC6WY1C3J');
-</script>
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "wnsrafycal");
-</script>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Noteable</title>
-  <link rel="stylesheet" href="styles.css" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noteable</title>
@@ -64,7 +44,7 @@
         <div class="stage-column">
           <canvas id="musicCanvas" width="640" height="260" aria-label="Музикален пример"></canvas>
           <div class="interval-tools">
-            <button id="playIntervalBtn" class="primary-btn play-interval" data-i18n="playInterval" hidden>Play</button>
+            <button id="playIntervalBtn" class="primary-btn play-interval" data-i18n="playInterval" hidden>Пусни</button>
           </div>
           <div id="pianoClip" class="piano-clip" hidden></div>
           <div id="prompt" class="prompt"></div>
@@ -76,6 +56,7 @@
             <div id="correctLabel" class="score correct">Верни: 0</div>
             <div id="wrongLabel" class="score wrong">Грешни: 0</div>
             <div id="successLabel" class="score success">Успеваемост: 0%</div>
+            <div id="streakLabel" class="score streak">Streak: 0</div>
           </div>
           <div class="action-grid">
             <button id="resetBtn" class="primary-btn" data-i18n="reset">Reset</button>
@@ -132,6 +113,11 @@
     </section>
   </main>
 
+  <nav class="social-links" aria-label="Социални медии">
+    <a class="social-btn instagram" href="https://www.instagram.com/noteable_game?igsh=ZWhsN2R6bWRkcmZx" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+    <a class="social-btn facebook" href="https://www.facebook.com/share/1CSd4UNn57/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+  </nav>
+
   <dialog id="helpDialog" class="help-dialog">
     <div class="dialog-header">
       <h2 data-i18n="help">Помощ</h2>
@@ -145,6 +131,13 @@
       <button id="closeHelpBtn" class="primary-btn" data-i18n="back">Назад</button>
     </div>
   </dialog>
+
+  <div id="streakPopup" class="streak-popup" role="status" aria-live="polite" hidden>
+    <button id="closeStreakPopup" class="streak-close" aria-label="Close">×</button>
+    <div class="streak-icon">🔥</div>
+    <div class="streak-title" data-i18n="streakPopupTitle">Streak</div>
+    <div id="streakPopupText" class="streak-popup-text"></div>
+  </div>
 
   <script src="app.js"></script>
 </body>

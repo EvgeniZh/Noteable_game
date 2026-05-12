@@ -165,3 +165,129 @@ button, select, input { font: inherit; }
   .play-interval { width: 100%; }
   .piano-keyboard { height: 72px; }
 }
+
+
+/* Social buttons */
+.social-links {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  display: flex;
+  gap: 10px;
+}
+.social-btn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  text-decoration: none;
+  color: white;
+  font-weight: 900;
+  letter-spacing: .02em;
+  box-shadow: 0 10px 22px rgba(38, 51, 38, .22);
+  border: 2px solid rgba(255, 255, 255, .75);
+  transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
+}
+.social-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 14px 28px rgba(38, 51, 38, .28);
+  filter: brightness(1.04);
+}
+.social-btn.instagram {
+  background: linear-gradient(135deg, #7db46c, #564122);
+  font-size: .9rem;
+}
+.social-btn.facebook {
+  background: #345434;
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+/* Streak UI */
+.score.streak {
+  color: #345434;
+}
+.streak-popup {
+  position: fixed;
+  right: 18px;
+  top: 90px;
+  z-index: 60;
+  width: min(320px, calc(100vw - 36px));
+  padding: 18px 46px 18px 18px;
+  border: 1px solid rgba(38, 51, 38, .18);
+  background: rgba(245, 245, 245, .96);
+  color: var(--ink);
+  box-shadow: 0 18px 38px rgba(38, 51, 38, .25);
+  transform: translateY(-12px) scale(.96);
+  opacity: 0;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.streak-popup.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.streak-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.streak-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #345434;
+  margin-bottom: 4px;
+}
+.streak-popup-text {
+  font-weight: 700;
+  color: var(--muted);
+}
+.streak-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.45rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* More tactile button feedback */
+.primary-btn,
+.social-btn,
+.icon-btn,
+.streak-close {
+  -webkit-tap-highlight-color: transparent;
+}
+.button-press {
+  animation: buttonPop .28s cubic-bezier(.2, 1.4, .3, 1);
+}
+@keyframes buttonPop {
+  0% { transform: scale(1); }
+  42% { transform: scale(.94); box-shadow: 0 0 0 5px rgba(125, 180, 108, .22); }
+  72% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 620px) {
+  .social-links {
+    right: 12px;
+    bottom: 12px;
+    gap: 8px;
+  }
+  .social-btn {
+    width: 42px;
+    height: 42px;
+  }
+  .streak-popup {
+    right: 12px;
+    top: 70px;
+    width: min(300px, calc(100vw - 24px));
+  }
+}

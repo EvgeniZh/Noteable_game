@@ -12,8 +12,8 @@ const I18N = {
     modeNotes: 'Ноти', modeKeys: 'Тоналности', modeIntervals: 'Интервали', modeSymbols: 'Музикални символи',
     reset: 'Нулиране', next: 'Следващ', mainMenu: 'Към главното меню', settings: 'Настройки', modeLabel: 'Режим', noteNames: 'Имена на ноти', clefLabel: 'Ключ', tonalityLabel: 'Маж/Мин', familyLabel: 'Диези/Бемоли',
     treble: 'Сол', bass: 'Фа', bothClefs: 'И двете', major: 'Мажор', minor: 'Минор', bothTonalities: 'И двете', bothFamilies: 'И диези, и бемоли', sharpsOnly: 'Само диези', flatsOnly: 'Само бемоли',
-    upToSigns: 'До колко знака', accidentals: 'Алт.', help: 'Помощ', back: 'Назад', correct: 'Верни', wrong: 'Грешни', success: 'Успеваемост',
-    notePrompt: 'Познай нотата по нейната позиция върху петолинието.', keyPrompt: 'Познай тоналността по показаните арматурни знаци.', intervalPrompt: 'Познай интервала между двете ноти.', playInterval: 'Play', playingInterval: 'Интервалът се изпълнява...',
+    upToSigns: 'До колко знака', accidentals: 'Алт.', help: 'Помощ', back: 'Назад', correct: 'Верни', wrong: 'Грешни', success: 'Успеваемост', streak: 'Streak', streakPopupTitle: 'Streak приключи!', streakPopupText: 'Достигна {count} поредни верни отговора.',
+    notePrompt: 'Познай нотата по нейната позиция върху петолинието.', keyPrompt: 'Познай тоналността по показаните арматурни знаци.', intervalPrompt: 'Познай интервала между двете ноти.', playInterval: 'Пусни', playingInterval: 'Интервалът се изпълнява...',
     correctMsg: 'Вярно!', wrongMsg: 'Грешно.', noteIs: 'Нотата е', correctAnswerIs: 'Правилният отговор е', intervalIs: 'Интервалът е', skipped: 'Прескочено: +1 към грешни.',
     clefCanvas: 'Ключ', keyCanvas: 'Тоналност', recognizeKeySignature: 'Разпознай тоналността по арматурните знаци', multipleChoice: 'Въпрос с избираеми отговори',
     majorWord: 'мажор', minorWord: 'минор', sharpWord: 'диез', flatWord: 'бемол', doubleSharpWord: 'двоен диез', doubleFlatWord: 'двоен бемол'
@@ -25,7 +25,7 @@ const I18N = {
     modeNotes: 'Notes', modeKeys: 'Key signatures', modeIntervals: 'Intervals', modeSymbols: 'Musical symbols',
     reset: 'Reset', next: 'Next', mainMenu: 'Main menu', settings: 'Settings', modeLabel: 'Mode', noteNames: 'Note names', clefLabel: 'Clef', tonalityLabel: 'Maj/Min', familyLabel: 'Sharps/Flats',
     treble: 'Treble', bass: 'Bass', bothClefs: 'Both', major: 'Major', minor: 'Minor', bothTonalities: 'Both', bothFamilies: 'Sharps and flats', sharpsOnly: 'Sharps only', flatsOnly: 'Flats only',
-    upToSigns: 'Up to signs', accidentals: 'Acc.', help: 'Help', back: 'Back', correct: 'Correct', wrong: 'Wrong', success: 'Success rate',
+    upToSigns: 'Up to signs', accidentals: 'Acc.', help: 'Help', back: 'Back', correct: 'Correct', wrong: 'Wrong', success: 'Success rate', streak: 'Streak', streakPopupTitle: 'Streak ended!', streakPopupText: 'You reached {count} correct answers in a row.',
     notePrompt: 'Name the note by its position on the staff.', keyPrompt: 'Identify the key signature shown on the staff.', intervalPrompt: 'Identify the interval between the two notes.', playInterval: 'Play', playingInterval: 'Playing the interval...',
     correctMsg: 'Correct!', wrongMsg: 'Wrong.', noteIs: 'The note is', correctAnswerIs: 'The correct answer is', intervalIs: 'The interval is', skipped: 'Skipped: +1 wrong answer.',
     clefCanvas: 'Clef', keyCanvas: 'Key', recognizeKeySignature: 'Recognize the key from the key signature', multipleChoice: 'Multiple-choice question',
@@ -162,14 +162,15 @@ const els = {
   menu: document.getElementById('menuScreen'), game: document.getElementById('gameScreen'),
   canvas: document.getElementById('musicCanvas'), prompt: document.getElementById('prompt'), answers: document.getElementById('answers'), message: document.getElementById('message'),
   playInterval: document.getElementById('playIntervalBtn'), pianoClip: document.getElementById('pianoClip'),
-  correct: document.getElementById('correctLabel'), wrong: document.getElementById('wrongLabel'), success: document.getElementById('successLabel'),
+  correct: document.getElementById('correctLabel'), wrong: document.getElementById('wrongLabel'), success: document.getElementById('successLabel'), streak: document.getElementById('streakLabel'),
   reset: document.getElementById('resetBtn'), next: document.getElementById('nextBtn'), mainMenu: document.getElementById('mainMenuBtn'), help: document.getElementById('helpBtn'),
   mode: document.getElementById('modeSelect'), naming: document.getElementById('namingSelect'), clef: document.getElementById('clefSelect'), tonality: document.getElementById('tonalitySelect'), family: document.getElementById('familySelect'), signs: document.getElementById('signsInput'), accidentals: document.getElementById('accidentalsCheck'),
   lang: document.getElementById('languageSelect'), helpDialog: document.getElementById('helpDialog'), closeHelp: document.getElementById('closeHelpBtn'), closeHelpTop: document.getElementById('closeHelpTop'),
+  streakPopup: document.getElementById('streakPopup'), streakPopupText: document.getElementById('streakPopupText'), closeStreakPopup: document.getElementById('closeStreakPopup'),
 };
 const ctx = els.canvas.getContext('2d');
 const state = {
-  correctCount: 0, wrongCount: 0, recentSymbols: [], timer: 0, playTimers: [], audioCtx: null, audioMaster: null,
+  correctCount: 0, wrongCount: 0, streakCount: 0, recentSymbols: [], timer: 0, streakTimer: 0, playTimers: [], audioCtx: null, audioMaster: null,
   noteQ: null, keyQ: null, intervalQ: null, symbolQ: null,
 };
 const bgNoteRoots = { C: 'До', D: 'Ре', E: 'Ми', F: 'Фа', G: 'Сол', A: 'Ла', B: 'Си' };
@@ -228,6 +229,8 @@ function resetScore() {
   window.clearTimeout(state.timer);
   state.correctCount = 0;
   state.wrongCount = 0;
+  state.streakCount = 0;
+  hideStreakPopup();
   setMessage('', '');
   updateScoreLabels();
 }
@@ -236,10 +239,35 @@ function updateScoreLabels() {
   els.wrong.textContent = `${t('wrong')}: ${state.wrongCount}`;
   const total = state.correctCount + state.wrongCount;
   els.success.textContent = `${t('success')}: ${total > 0 ? Math.round(state.correctCount * 100 / total) : 0}%`;
+  els.streak.textContent = `${t('streak')}: ${state.streakCount}`;
 }
 function setMessage(text, type = '') {
   els.message.textContent = text;
   els.message.className = `message ${type}`.trim();
+}
+function hideStreakPopup() {
+  window.clearTimeout(state.streakTimer);
+  if (els.streakPopup) {
+    els.streakPopup.hidden = true;
+    els.streakPopup.classList.remove('show');
+  }
+}
+function showStreakPopup(count) {
+  if (!els.streakPopup || !els.streakPopupText) return;
+  window.clearTimeout(state.streakTimer);
+  els.streakPopupText.textContent = t('streakPopupText').replace('{count}', String(count));
+  els.streakPopup.hidden = false;
+  requestAnimationFrame(() => els.streakPopup.classList.add('show'));
+  state.streakTimer = window.setTimeout(hideStreakPopup, 3200);
+}
+function registerCorrect() {
+  state.correctCount++;
+  state.streakCount++;
+}
+function registerWrong() {
+  state.wrongCount++;
+  showStreakPopup(state.streakCount);
+  state.streakCount = 0;
 }
 function updatePlayButtonVisibility() {
   if (!els.playInterval) return;
@@ -347,28 +375,28 @@ function finishAnswer() {
 }
 function handleNoteAnswer(guess) {
   const expected = noteText(state.noteQ.note, els.naming.value);
-  if (guess === state.noteQ.note.stepIndex) { state.correctCount++; setMessage(`${t('correctMsg')} ${t('noteIs')} ${expected}.`, 'good'); }
-  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${t('correctAnswerIs')} ${expected}.`, 'bad'); }
+  if (guess === state.noteQ.note.stepIndex) { registerCorrect(); setMessage(`${t('correctMsg')} ${t('noteIs')} ${expected}.`, 'good'); }
+  else { registerWrong(); setMessage(`${t('wrongMsg')} ${t('correctAnswerIs')} ${expected}.`, 'bad'); }
   finishAnswer();
 }
 function handleIntervalAnswer(guess) {
-  if (guess === state.intervalQ.interval.label) { state.correctCount++; setMessage(`${t('correctMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'good'); }
-  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'bad'); }
+  if (guess === state.intervalQ.interval.label) { registerCorrect(); setMessage(`${t('correctMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'good'); }
+  else { registerWrong(); setMessage(`${t('wrongMsg')} ${t('intervalIs')} ${state.intervalQ.interval.label}.`, 'bad'); }
   finishAnswer();
 }
 function handleKeyAnswer(selected) {
   if (selected === keyDisplayName(state.keyQ.correctAnswer)) {
-    state.correctCount++;
+    registerCorrect();
     setMessage(`${t('correctMsg')} ${keyDisplayName(state.keyQ.correctAnswer)}.`, 'good');
   } else {
-    state.wrongCount++;
+    registerWrong();
     setMessage(`${t('wrongMsg')} ${t('correctAnswerIs')} ${keyDisplayName(state.keyQ.correctAnswer)}.`, 'bad');
   }
   finishAnswer();
 }
 function handleSymbolAnswer(selected) {
-  if (selected === state.symbolQ.correctAnswer) { state.correctCount++; setMessage(`${t('correctMsg')} ${state.symbolQ.explanation}`, 'good'); }
-  else { state.wrongCount++; setMessage(`${t('wrongMsg')} ${state.symbolQ.explanation}`, 'bad'); }
+  if (selected === state.symbolQ.correctAnswer) { registerCorrect(); setMessage(`${t('correctMsg')} ${state.symbolQ.explanation}`, 'good'); }
+  else { registerWrong(); setMessage(`${t('wrongMsg')} ${state.symbolQ.explanation}`, 'bad'); }
   finishAnswer();
 }
 
@@ -413,13 +441,18 @@ function drawClef(clef, x, y) {
   ctx.fillStyle = 'black';
   ctx.textBaseline = 'alphabetic';
   if (clef === 'Treble') {
+    // Оставено без промяна.
     ctx.font = '148px "Segoe UI Symbol", "Noto Music", "Bravura", serif';
     ctx.fillText('𝄞', x - 12, y + 128);
     return x + STAFF.clefAdvanceTreble;
   }
-  ctx.font = '112px "Segoe UI Symbol", "Noto Music", "Bravura", serif';
-  ctx.fillText('𝄢', x - 2, y + 88);
-  return x + STAFF.clefAdvanceBass;
+
+  // Коригиран ключ Фа според референтните изображения.
+  // Центърът на знака е свален и изместен леко вдясно,
+  // без да се променя позицията на ключ Сол.
+  ctx.font = '118px "Segoe UI Symbol", "Noto Music", "Bravura", serif';
+  ctx.fillText('𝄢', x + 6, y + 96);
+  return x + 96;
 }
 function drawKeySignature(clef, key, x, y) {
   const count = Math.abs(key.fifths);
@@ -589,7 +622,7 @@ function validateSigns() {
 
 document.querySelectorAll('[data-start-mode]').forEach(btn => btn.addEventListener('click', () => startGame(btn.dataset.startMode)));
 els.reset.addEventListener('click', () => { resetScore(); generateQuestion(); });
-els.next.addEventListener('click', () => { window.clearTimeout(state.timer); state.wrongCount++; setMessage(t('skipped'), 'warn'); updateScoreLabels(); state.timer = window.setTimeout(generateQuestion, MESSAGE_DELAY_MS); });
+els.next.addEventListener('click', () => { window.clearTimeout(state.timer); registerWrong(); setMessage(t('skipped'), 'warn'); updateScoreLabels(); state.timer = window.setTimeout(generateQuestion, MESSAGE_DELAY_MS); });
 els.mainMenu.addEventListener('click', () => { window.clearTimeout(state.timer); clearPlayTimers(); showScreen('menu'); });
 els.mode.addEventListener('change', () => { resetScore(); generateQuestion(); });
 els.playInterval.addEventListener('click', playIntervalClip);
@@ -599,6 +632,14 @@ els.lang.addEventListener('change', () => { currentLang = els.lang.value; localS
 els.help.addEventListener('click', () => els.helpDialog.showModal());
 els.closeHelp.addEventListener('click', () => els.helpDialog.close());
 els.closeHelpTop.addEventListener('click', () => els.helpDialog.close());
+els.closeStreakPopup.addEventListener('click', hideStreakPopup);
+document.addEventListener('click', event => {
+  const clickable = event.target.closest('button, .social-btn');
+  if (!clickable) return;
+  clickable.classList.remove('button-press');
+  void clickable.offsetWidth;
+  clickable.classList.add('button-press');
+});
 window.addEventListener('resize', drawCanvas);
 applyLanguage();
 updateScoreLabels();
